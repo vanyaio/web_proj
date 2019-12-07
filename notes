@@ -1,0 +1,44 @@
+./mysqls -h database-2.ctr9yzjpib8v.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
+188.242.31.186/32
+\sql
+
+
+aws2 lambda create-function --function-name  CreateTableAddRecordsAndRead --runtime python3.8 \
+--zip-file fileb://app.zip --handler app.handler \
+--role arn:aws:iam::904166945708:role/lambda-vpc-role \
+--vpc-config SubnetIds=subnet-05b99b31e025a238d,SecurityGroupIds=sg-022fcaac3a87b01f0
+
+
+
+python3 -m pip install --target ./sql/python PyMySQL
+python3 -m pip install --target ./yaml/python PyYAML
+
+
+import json
+def lambda_handler(event, context):
+    # TODO implement
+    return {
+        'statusCode': 200,
+        #'body': json.dumps('Hello from Python Lambda!'),
+        'body': json.dumps(event),
+        #'headers': { 'Set-Cookie': 'kyky2' }
+        #'body': json.dumps(event["queryStringParameters"])
+        #'body': event["queryStringParameters"]['var']
+        #  'event': event,
+        #  'fn_name': context.function_name
+    }
+
+
+
+
+<form action="." method="get">
+  First name: <input type="text" name="show"><br>
+  <input type="submit" value="Submit">
+</form>
+
+<form>
+  <input type="checkbox" name="vehicle1" value="Bike"> I have a bike<br>
+  <input type="checkbox" name="vehicle2" value="Car"> I have a car
+</form>
+
+[{'type': 'desc', 'desc': 'gender?'}, {'type': 'radio', 'opts': [{'val': 'male', 'desc': 'Male'}, {'val': 'female', 'desc': 'Female'}]}]
