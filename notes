@@ -1,6 +1,8 @@
-./mysqls -h database-2.ctr9yzjpib8v.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
-188.242.31.186/32
+./mysqlsh -h database-2.ctr9yzjpib8v.us-east-1.rds.amazonaws.com -P 3306 -u admin -p
 \sql
+
+
+psql -h postgres-db.ctr9yzjpib8v.us-east-1.rds.amazonaws.com -P 5432 -U postgres
 
 
 aws2 lambda create-function --function-name  CreateTableAddRecordsAndRead --runtime python3.8 \
@@ -12,6 +14,8 @@ aws2 lambda create-function --function-name  CreateTableAddRecordsAndRead --runt
 
 python3 -m pip install --target ./sql/python PyMySQL
 python3 -m pip install --target ./yaml/python PyYAML
+python3 -m pip install --target ./postgresql/python psycopg2
+env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" pip3 install psycopg2 -t ./postgresql/python 
 
 
 import json

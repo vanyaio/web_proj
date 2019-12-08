@@ -8,6 +8,11 @@ def lambda_handler(event, context):
     }
 
     q_string = event["queryStringParameters"]
+
+    if q_string is None:
+        ret['body'] = ""
+        return ret
+
     if ('show' in q_string):
         body_str = f'''
                 <html>
