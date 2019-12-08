@@ -63,22 +63,22 @@ def get_var_val_str_from_map(q_string):
 
 if __name__ == "__main__":
     ys = f'''
-    - type: desc
-      desc: "gender?"
-    - type: radio
-      opts:
-        - val: male
-          desc: "Male"
-        - val: female
-          desc: "Female"
-    - type: desc
-      desc: "Car?"
-    - type: radio
-      opts:
-        - val: bmw
-          desc: "BMW"
-        - val: mers
-          desc: "MERS"
+- type: desc
+  desc: "gender?"
+- type: radio
+  opts:
+    - val: male
+      desc: "Male"
+    - val: female
+      desc: "Female"
+- type: desc
+  desc: "Car?"
+- type: radio
+  opts:
+    - val: bmw
+      desc: "BMW"
+    - val: mers
+      desc: "MERS"
     '''
 
     print(get_html_survey_from_yaml_str(ys, "./prod"))

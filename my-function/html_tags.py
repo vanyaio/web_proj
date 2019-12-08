@@ -22,10 +22,11 @@ main_menu = wrap_tag(main_menu)
 
 create_survey = f'''
                 <form action="./prod" method="get">
-                  <textarea name="yaml" cols="50" rows="80"></textarea>
+                  <textarea name="%s" cols="50" rows="80"></textarea>
                   <input type="submit" value="Submit">
                 </form>
-                '''
+                ''' % q_params.create_by_yaml 
+
 create_survey = wrap_tag(create_survey)
 
 def create_by_yaml(added_survey):
