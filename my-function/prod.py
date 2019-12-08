@@ -2,18 +2,32 @@ import json
 import db_queries
 import html_tags
 import q_params
+import survey
 
 def create_by_yaml(yaml_str):
-    db_queries.survey_add(db_queries.anon, yaml_str);
+    db_queries.add_survey(db_queries.anon, yaml_str);
     added_survey = db_queries.get_last_survey()
     return html_tags.create_by_yaml(added_survey)
 
 def get_survey(survey_id):
     yaml_str = db_queries.get_survey_yaml(survey_id)
-    return html_tags.get_survey(yaml_str)
+    return html_tags.get_survey(yaml_str, survey_id)
 
-def get_survey_res(servey_id):
-    
+def get_survey_res(survey_id):
+    res_raws = db_queries.get_survey_res(survey_id)
+    survey_yaml_str = db_queries.get_survey_yaml(survey_id)
+    html_str = ''
+    for res in res_raws:
+        var_val_map = survey.get_var_val_map_from_str(res['var_val_map'])
+        html_str += survey.get_html_survey_res(var_val_map, survey_yaml_str)
+    return html_tags.get_survey_res(html_str)
+
+def submit_survey(q_string):
+    var_val_map_str = survey.get_var_val_str_from_map(q_string)
+    #db_queries.survey_id_str == 'survey_id'
+    db_queries.add_survey_res(q_string[db_queries.survey_id_str], db_queries.anon, var_val_map_str)
+    return html_tags.submit_survey(q_string[db_queries.survey_id_str])
+
 def lambda_handler(event, context):
     ret = {}
     ret['statusCode'] = 200
@@ -21,6 +35,7 @@ def lambda_handler(event, context):
         'Content-Type': 'text/html'
     }
 
+    #actually that's mapping
     q_string = event["queryStringParameters"]
 
     if q_string is None:
@@ -34,6 +49,9 @@ def lambda_handler(event, context):
         return ret
     elif q_params.get_survey in q_string:
         ret['body'] = get_survey(q_string[q_params.get_survey])
+        return ret
+    elif q_params.submit_survey in q_string:
+        ret['body'] = submit_survey(q_string)
         return ret
     elif q_params.get_survey_res in q_string:
         ret['body'] = get_survey_res(q_string[q_params.get_survey_res])
