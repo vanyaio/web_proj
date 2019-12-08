@@ -11,21 +11,19 @@ logger.setLevel(logging.INFO)
 def create_by_yaml(yaml_str):
     str1 = yaml_str.replace("\r", "")
     str2 = str1.replace('"', '\\"')
-    logger.info(yaml_str)
-    logger.info(str1)
-    logger.info(str2)
-
     db_queries.add_survey(db_queries.anon, str2);
     added_survey = db_queries.get_last_survey()
-    return html_tags.create_by_yaml(added_survey)
 
-    logger.info(yaml_str)
+    logger.info(added_survey)
+
+    return html_tags.create_by_yaml(added_survey)
     #  logger.info(yaml_str.count('\n'))
     #  logger.info(yaml_str.count('\r'))
     #  logger.info(len(yaml_str.splitlines()))
     #  return html_tags.create_by_yaml(10)
 
 def get_survey(survey_id):
+    logger.info(survey_id)
     yaml_str = db_queries.get_survey_yaml(survey_id)
     return html_tags.get_survey(yaml_str, survey_id)
 

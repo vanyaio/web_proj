@@ -1,4 +1,5 @@
 import q_params
+import survey
 
 def wrap_tag(tag):
     html_begin = f'''
@@ -42,8 +43,8 @@ def get_survey(yaml_str, survey_id):
                       <input type="hidden" name="%s" value="%s">
                       <input type="submit" value="See survey results">
                     </form>
-                ''' % (q_params.get_survey_res, str(survey_id))
-    html_str += survey.get_html_survey_from_yaml_str(yaml_str, "./prod")
+                ''' % (q_params.get_survey_res, '1')
+    html_str += survey.get_html_survey_from_yaml_str(yaml_str, "./prod", survey_id)
     return wrap_tag(html_str)
 
 def submit_survey(survey_id):

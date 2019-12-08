@@ -10,7 +10,7 @@ def parse_yaml_string(ys):
     dct = yaml.load(fd, Loader=yaml.FullLoader)
     return dct
 
-def get_html_survey_from_yaml_str(survey_str, form_action):
+def get_html_survey_from_yaml_str(survey_str, form_action, survey_id):
     name_cnt = 1
     html_str = f'''<form action="%s" method="get">''' % form_action
     yaml_dict = parse_yaml_string(survey_str)
@@ -26,6 +26,7 @@ def get_html_survey_from_yaml_str(survey_str, form_action):
 <input type="%s" name="%s" value="%s"> %s <br> ''' % ('radio',name,opt['val'],opt['desc'])
 
     html_str += f'''\n<input type="hidden" name="%s" value="1">''' % q_params.submit_survey
+    html_str += f'''\n<input type="hidden" name="%s" value="%s">''' % (q_params.survey_id_str, str(survey_id))
     html_str += '\n<input type="submit" value="Submit">'
     html_str += "\n</form>"
     return html_str
@@ -58,7 +59,7 @@ def get_var_val_str_from_map(q_string):
     var_val_str = ''
     for param in q_string:
         if param[:4] == 'name':
-            var_val_str += f''' %s="%s"''' % (param, q_string[param])
+            var_val_str += f''' %s=\\"%s\\"''' % (param, q_string[param])
     return var_val_str
 
 if __name__ == "__main__":
@@ -81,7 +82,7 @@ if __name__ == "__main__":
       desc: "MERS"
     '''
 
-    print(get_html_survey_from_yaml_str(ys, "./prod"))
+    print(get_html_survey_from_yaml_str(ys, "./prod", 10))
     print(get_html_survey_res({'name1' : 'male', 'name2' : 'mers'}, ys))
     print('----')
     str1 = ' name1="male" name2="mers" '

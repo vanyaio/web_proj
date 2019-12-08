@@ -21,24 +21,27 @@ def get_last_survey():
             select id from survey where
             id = (select max(id) from survey);
             ''')
+        ret = cur.fetchall()
         conn.commit()
-        return cur
+        return ret[0][0]
 
 def get_survey_yaml(survey_id):
     with conn.cursor() as cur:
         cur.execute(f'''
             select yaml from survey where id = %s;
             ''' % survey_id)
+        ret = cur.fetchall()
         conn.commit()
-        return cur
+        return ret[0][0]
 
 def get_survey_res(survey_id):
     with conn.cursor() as cur:
         cur.execute(f'''
             select * from survey_res where survey_id = %s;
             ''' % survey_id)
+        ret = cur.fetchall()
         conn.commit()
-        return cur
+        return ret
 
 def add_survey_res(survey_id, login, var_val_map_str):
     with conn.cursor() as cur:
