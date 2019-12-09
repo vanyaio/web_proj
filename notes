@@ -46,3 +46,13 @@ def lambda_handler(event, context):
 </form>
 
 [{'type': 'desc', 'desc': 'gender?'}, {'type': 'radio', 'opts': [{'val': 'male', 'desc': 'Male'}, {'val': 'female', 'desc': 'Female'}]}]
+
+
+- type: desc
+  desc: "gender?"
+- type: radio
+  opts:
+    - val: male
+      desc: "Male"
+    - val: female
+      desc: "Female"
