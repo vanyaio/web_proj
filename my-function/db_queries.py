@@ -38,7 +38,7 @@ def get_survey_res(survey_id):
     with conn.cursor() as cur:
         cur.execute(f'''
             select * from survey_res where survey_id = %s;
-            ''' % survey_id)
+            ''' % str(survey_id))
         ret = cur.fetchall()
         conn.commit()
         return ret
