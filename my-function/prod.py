@@ -72,6 +72,11 @@ def lambda_handler(event, context):
     elif q_params.get_login_page in q_string:
         ret['body'] = html_tags.login_page
         return ret
+    elif q_params.logout in q_string:
+        ret['headers']['Set-Cookie'] = ''
+        user.login = db_queries.anon
+        ret['body'] = html_tags.main_menu()
+        return ret
     elif q_params.get_signup_page in q_string:
         ret['body'] = html_tags.signup_page
         return ret

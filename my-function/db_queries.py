@@ -47,6 +47,9 @@ def get_survey_res(survey_id):
 
 def get_login_by_cookie(cookie):
 #consider logout - we cannot clean cookies
+    if cookie == '':
+        return anon
+
     with conn.cursor() as cur:
         cur.execute(f'''
             select login from cookie where cookie = '%s';

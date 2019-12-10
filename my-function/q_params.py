@@ -10,3 +10,4 @@ login = 'login'
 password = 'password'
 get_signup_page = "get_signup_page" 
 do_signup = "do_signup"
+logout = "logout"

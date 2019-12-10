@@ -16,7 +16,11 @@ def wrap_tag(tag):
                   <input type="hidden" name="%s" value="1">
                   <input type="submit" value="Create user">
                 </form>
-                ''' % (user.login, q_params.get_login_page, q_params.get_signup_page)
+                <form action="./prod" method="get">
+                  <input type="hidden" name="%s" value="1">
+                  <input type="submit" value="Logout">
+                </form>
+                ''' % (user.login, q_params.get_login_page, q_params.get_signup_page, q_params.logout)
     html_end = f'''
                 </body>
                 </html>
