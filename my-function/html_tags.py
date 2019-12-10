@@ -12,7 +12,7 @@ def wrap_tag(tag):
                   <input type="hidden" name="%s" value="1">
                   <input type="submit" value="Switch user">
                 </form>
-                ''' % (user.login, q_string.get_login_page)
+                ''' % (user.login, q_params.get_login_page)
     html_end = f'''
                 </body>
                 </html>
@@ -38,20 +38,23 @@ fail_login = f'''
             ''' % q_params.create_survey
 fail_login = wrap_tag(fail_login)
 
-create_survey = f'''
-                <form action="./prod" method="get">
-                  <textarea name="%s" cols="50" rows="80"></textarea>
-                  <input type="submit" value="Submit">
-                </form>
-                ''' % q_params.create_by_yaml 
+def create_survey():
+    create_survey = f'''
+                    <form action="./prod" method="get">
+                      <textarea name="%s" cols="50" rows="80"></textarea>
+                      <input type="submit" value="Submit">
+                    </form>
+                    ''' % q_params.create_by_yaml 
 
-create_survey = wrap_tag(create_survey)
+    create_survey = wrap_tag(create_survey)
+    return create_survey
 
 login_page = f'''
             <form action="./prod" method="get">
               login: <input type="text" name="%s"><br>
               password: <input type="text" name="%s"><br>
               <input type="hidden" name="%s" value="1">
+              <input type="submit" value="Log in!">
             </form>
             ''' % (q_params.login, q_params.password, q_params.do_login)
 

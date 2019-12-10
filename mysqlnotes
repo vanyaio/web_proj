@@ -24,6 +24,14 @@ create table survey_res (
 	foreign key (survey_id) references survey(id)
 );
 
+create table cookie (
+	cookie varchar(30),
+	login varchar(30),
+
+	foreign key (login) references user(login),
+	primary key (cookie)
+);
+
 insert into user values("Anonymous", "123");
 insert into user values("petya", "1234");
 insert into user values("vanya", "1234");

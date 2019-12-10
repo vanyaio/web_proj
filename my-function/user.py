@@ -1,3 +1,4 @@
+import db_queries
 login = ''
 
 def get_current_user(event, cookie=None):

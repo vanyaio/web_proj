@@ -42,7 +42,8 @@ def get_survey_res(survey_id):
 
 def submit_survey(q_string):
     var_val_map_str = survey.get_var_val_str_from_map(q_string)
-    db_queries.add_survey_res(q_string[q_params.survey_id_str], db_queries.anon, var_val_map_str)
+    #  db_queries.add_survey_res(q_string[q_params.survey_id_str], db_queries.anon, var_val_map_str)
+    db_queries.add_survey_res(q_string[q_params.survey_id_str], user.login, var_val_map_str)
     return html_tags.submit_survey(q_string[q_params.survey_id_str])
 
 ok_login = 'ok_login'
@@ -63,11 +64,12 @@ def lambda_handler(event, context):
     }
 
     user.get_current_user(event)
+    logger.info(user.login)
     #actually that's mapping
     q_string = event["queryStringParameters"]
 
     if q_string is None:
-        ret['body'] = html_tags.main_menu
+        ret['body'] = html_tags.main_menu()
         return ret
     elif q_params.get_login_page in q_string:
         ret['body'] = html_tags.login_page
@@ -80,10 +82,11 @@ def lambda_handler(event, context):
             ret['body'] = html_tags.main_menu()
             return ret
         else:
+            #fail_login()
             ret['body'] = html_tags.fail_login
             return ret
     elif q_params.create_survey in q_string:
-        ret['body'] = html_tags.create_survey
+        ret['body'] = html_tags.create_survey()
         return ret
     elif q_params.create_by_yaml in q_string:
         ret['body'] = create_by_yaml(q_string[q_params.create_by_yaml])

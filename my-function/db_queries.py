@@ -49,7 +49,7 @@ def get_login_by_cookie(cookie):
 #consider logout - we cannot clean cookies
     with conn.cursor() as cur:
         cur.execute(f'''
-            select login from cookie where cookie = %s;
+            select login from cookie where cookie = '%s';
             ''' % str(cookie))
         ret = cur.fetchall()
         conn.commit()
@@ -59,7 +59,7 @@ def is_login_data_correct(login, password):
     with conn.cursor() as cur:
         rows_cnt = cur.execute(f'''
                             select * from user where
-                            login = %s and password = %s
+                            (login = '%s' and passwd = '%s');
                             ''' % (login, password))
         if (rows_cnt > 0):
             return True
