@@ -5,3 +5,7 @@ get_survey_res = "get_survey_res"
 submit_survey = "submit_survey"
 #db_queries.survey_id_str == 'survey_id'
 survey_id_str = 'survey_id'
+get_login_page = 'get_login_page'
+do_login = 'do_login'
+login = 'login'
+password = 'password'
