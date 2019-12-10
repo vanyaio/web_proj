@@ -50,7 +50,6 @@ def do_login(login, password):
     status[cookie] = db_queries.add_cookie(login)
     return status
 
-ok_signup = 'ok_signup'
 def do_signup(login, password):
     status = db_queries.add_user(login, password)
     return status
@@ -88,9 +87,8 @@ def lambda_handler(event, context):
             return ret
     elif q_params.do_signup in q_string:
         signup_status = do_signup(q_string[q_params.login], q_string[q_params.password])
-        if (signup_status[ok_signup]):
-            ret['body'] = html_tags.success_signup(q_string[q_params.login])
-            return ret
+        ret['body'] = html_tags.signup_res(q_string[q_params.login], signup_status)
+        return ret
     elif q_params.create_survey in q_string:
         ret['body'] = html_tags.create_survey()
         return ret

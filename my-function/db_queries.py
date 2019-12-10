@@ -77,7 +77,21 @@ def add_cookie(login):
         conn.commit()
         return cookie
 
+def is_login_already_created(login):
+    with conn.cursor() as cur:
+        rows_cnt = cur.execute(f'''
+                            select * from user where (login = '%s');
+                            ''' % login)
+        if (rows_cnt > 0):
+            return True
+        else:
+            return False
+
 def add_user(login, password):
+    if is_login_already_created(login): 
+        return {'ok_signup': False,
+                'err_message': f'''Login %s is already created!''' % login }
+
     with conn.cursor() as cur:
         cur.execute(f'''
             insert into user (login, passwd) values("%s", "%s");

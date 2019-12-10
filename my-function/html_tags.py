@@ -44,14 +44,19 @@ def fail_login():
     fail_login_p = wrap_tag(fail_login_p)
     return fail_login_p
 
-def success_signup(login):
-    page = f'''
-                User %s is successfully created! <br>
+def signup_res(login, status):
+    page = ''
+    if (status['ok_signup']):
+        page = f'''User %s is successfully created! <br>''' % login
+    else:
+        page = f'''Signup error: %s <br>''' % status['err_message']
+
+    page += f'''
                 <form action="./prod" method="get">
                   <input type="hidden" name="%s" value="1">
                   <input type="submit" value="Create survey">
                 </form>
-            ''' % (login, q_params.create_survey)
+            ''' % q_params.create_survey
     page = wrap_tag(page)
     return page
 
