@@ -12,7 +12,11 @@ def wrap_tag(tag):
                   <input type="hidden" name="%s" value="1">
                   <input type="submit" value="Switch user">
                 </form>
-                ''' % (user.login, q_params.get_login_page)
+                <form action="./prod" method="get">
+                  <input type="hidden" name="%s" value="1">
+                  <input type="submit" value="Create user">
+                </form>
+                ''' % (user.login, q_params.get_login_page, q_params.get_signup_page)
     html_end = f'''
                 </body>
                 </html>
@@ -29,14 +33,27 @@ def main_menu():
     main_menu = wrap_tag(main_menu)
     return main_menu
 
-fail_login = f'''
-                Wrong login or password! <br>
+def fail_login():
+    fail_login_p = f'''
+                    Wrong login or password! <br>
+                    <form action="./prod" method="get">
+                      <input type="hidden" name="%s" value="1">
+                      <input type="submit" value="Create survey">
+                    </form>
+                ''' % q_params.create_survey
+    fail_login_p = wrap_tag(fail_login_p)
+    return fail_login_p
+
+def success_signup(login):
+    page = f'''
+                User %s is successfully created! <br>
                 <form action="./prod" method="get">
                   <input type="hidden" name="%s" value="1">
                   <input type="submit" value="Create survey">
                 </form>
-            ''' % q_params.create_survey
-fail_login = wrap_tag(fail_login)
+            ''' % (login, q_params.create_survey)
+    page = wrap_tag(page)
+    return page
 
 def create_survey():
     create_survey = f'''
@@ -57,6 +74,15 @@ login_page = f'''
               <input type="submit" value="Log in!">
             </form>
             ''' % (q_params.login, q_params.password, q_params.do_login)
+
+signup_page = f'''
+            <form action="./prod" method="get">
+              login: <input type="text" name="%s"><br>
+              password: <input type="text" name="%s"><br>
+              <input type="hidden" name="%s" value="1">
+              <input type="submit" value="Add new user!">
+            </form>
+            ''' % (q_params.login, q_params.password, q_params.do_signup)
 
 def create_by_yaml(added_survey):
     html_str = f'''

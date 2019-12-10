@@ -77,6 +77,14 @@ def add_cookie(login):
         conn.commit()
         return cookie
 
+def add_user(login, password):
+    with conn.cursor() as cur:
+        cur.execute(f'''
+            insert into user (login, passwd) values("%s", "%s");
+            ''' % (login, password))
+        conn.commit()
+        return {'ok_signup' : True }
+
 
 def add_survey_res(survey_id, login, var_val_map_str):
     with conn.cursor() as cur:

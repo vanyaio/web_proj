@@ -18,10 +18,6 @@ def create_by_yaml(yaml_str):
     logger.info(added_survey)
 
     return html_tags.create_by_yaml(added_survey)
-    #  logger.info(yaml_str.count('\n'))
-    #  logger.info(yaml_str.count('\r'))
-    #  logger.info(len(yaml_str.splitlines()))
-    #  return html_tags.create_by_yaml(10)
 
 def get_survey(survey_id):
     logger.info(survey_id)
@@ -33,7 +29,6 @@ def get_survey_res(survey_id):
     survey_yaml_str = db_queries.get_survey_yaml(survey_id)
     html_str = ''
     for res in res_raws:
-        #  var_val_map = survey.get_var_val_map_from_str(res['var_val_map'])
         var_val_map = survey.get_var_val_map_from_str(res[2])
         login = res[1]
         html_str += str(login) + " <br>"
@@ -42,7 +37,6 @@ def get_survey_res(survey_id):
 
 def submit_survey(q_string):
     var_val_map_str = survey.get_var_val_str_from_map(q_string)
-    #  db_queries.add_survey_res(q_string[q_params.survey_id_str], db_queries.anon, var_val_map_str)
     db_queries.add_survey_res(q_string[q_params.survey_id_str], user.login, var_val_map_str)
     return html_tags.submit_survey(q_string[q_params.survey_id_str])
 
@@ -56,6 +50,11 @@ def do_login(login, password):
     status[cookie] = db_queries.add_cookie(login)
     return status
 
+ok_signup = 'ok_signup'
+def do_signup(login, password):
+    status = db_queries.add_user(login, password)
+    return status
+
 def lambda_handler(event, context):
     ret = {}
     ret['statusCode'] = 200
@@ -64,7 +63,7 @@ def lambda_handler(event, context):
     }
 
     user.get_current_user(event)
-    logger.info(user.login)
+    #  logger.info(user.login)
     #actually that's mapping
     q_string = event["queryStringParameters"]
 
@@ -74,6 +73,9 @@ def lambda_handler(event, context):
     elif q_params.get_login_page in q_string:
         ret['body'] = html_tags.login_page
         return ret
+    elif q_params.get_signup_page in q_string:
+        ret['body'] = html_tags.signup_page
+        return ret
     elif q_params.do_login in q_string:
         login_status = do_login(q_string[q_params.login], q_string[q_params.password])
         if (login_status[ok_login]):
@@ -82,8 +84,12 @@ def lambda_handler(event, context):
             ret['body'] = html_tags.main_menu()
             return ret
         else:
-            #fail_login()
-            ret['body'] = html_tags.fail_login
+            ret['body'] = html_tags.fail_login()
+            return ret
+    elif q_params.do_signup in q_string:
+        signup_status = do_signup(q_string[q_params.login], q_string[q_params.password])
+        if (signup_status[ok_signup]):
+            ret['body'] = html_tags.success_signup(q_string[q_params.login])
             return ret
     elif q_params.create_survey in q_string:
         ret['body'] = html_tags.create_survey()
