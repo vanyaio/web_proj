@@ -2,6 +2,8 @@ import sys
 import logging
 import rds_config
 import pymysql
+import random
+import string
 
 rds_host = "database-2.ctr9yzjpib8v.us-east-1.rds.amazonaws.com"
 conn = pymysql.connect(rds_host, user=rds_config.db_username, passwd=rds_config.db_password, db=rds_config.db_name, connect_timeout=5)
@@ -42,6 +44,39 @@ def get_survey_res(survey_id):
         ret = cur.fetchall()
         conn.commit()
         return ret
+
+def get_login_by_cookie(cookie):
+#consider logout - we cannot clean cookies
+    with conn.cursor() as cur:
+        cur.execute(f'''
+            select login from cookie where cookie = %s;
+            ''' % str(cookie))
+        ret = cur.fetchall()
+        conn.commit()
+        return ret[0][0]
+
+def is_login_data_correct(login, password):
+    with conn.cursor() as cur:
+        rows_cnt = cur.execute(f'''
+                            select * from user where
+                            login = %s and password = %s
+                            ''' % (login, password))
+        if (rows_cnt > 0):
+            return True
+        else:
+            return False
+
+def add_cookie(login):
+    N = 15 
+    cookie = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
+
+    with conn.cursor() as cur:
+        cur.execute(f'''
+            insert into cookie (cookie, login) values("%s", "%s");
+            ''' % (cookie, login))
+        conn.commit()
+        return cookie
+
 
 def add_survey_res(survey_id, login, var_val_map_str):
     with conn.cursor() as cur:
