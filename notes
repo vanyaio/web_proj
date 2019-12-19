@@ -21,11 +21,11 @@ python3 -m pip install --target ./google google-auth
 python3 -m pip install --target ./req3 requests
 pip install google-auth -t google27
 
-pip3 install requests -t req
+pip3 install requests -t .
 zip -r req.zip req
 pip3 uninstall requests
 
-pip3 install google-auth -t req
+pip3 install google-auth -t .
 
 pip3 install google-auth -t auth
 zip -r auth.zip auth

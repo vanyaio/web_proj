@@ -82,7 +82,13 @@ login_page = f'''
               <input type="hidden" name="%s" value="1">
               <input type="submit" value="Log in!">
             </form>
-            ''' % (q_params.login, q_params.password, q_params.do_login)
+            <br>
+            <form action="./prod" method="get">
+              <input type="hidden" name="%s" value="1">
+              <input type="submit" value="Log in with google">
+            </form>
+            
+            ''' % (q_params.login, q_params.password, q_params.do_login, q_params.get_google_login_page)
 
 signup_page = f'''
             <form action="./prod" method="get">
@@ -122,3 +128,50 @@ def submit_survey(survey_id):
 
 def get_survey_res(html_surveys_list_str):
     return wrap_tag(html_surveys_list_str)
+
+google_login_page = f'''
+<html lang="en">
+  <head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" 
+      content="1069669795497-ifvno18k8plqe1rdumnjls437oehl0ke.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+  </head>
+  <body>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <p id="content"></p>
+
+    <form action="./prod" method="get">
+      <input type="hidden" name="%s" value="1">
+      <textarea name="%s" cols="50" rows="40"></textarea>
+      <input type="submit" value="Login with this token">
+    </form>
+
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log("Full Name: " + profile.getName());
+        console.log("Given Name: " + profile.getGivenName());
+        console.log("Family Name: " + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+ 
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+ 
+        var request = new XMLHttpRequest();
+        request.open("GET","https://ogunh8f1ck.execute-api.us-east-1.amazonaws.com/prod", true);
+        request.setRequestHeader("Authorization", id_token);
+        request.onload = function() {
+          var text = request.responseText;
+          document.getElementById("content").innerHTML = id_token;
+        };
+        request.send(); 
+      }                                                                        
+    </script>
+  </body>
+</html>
+''' % (q_params.do_login_google, q_params.google_token)

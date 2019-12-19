@@ -54,6 +54,32 @@ def do_signup(login, password):
     status = db_queries.add_user(login, password)
     return status
 
+def do_login_google(token): 
+    status = {}
+    try:
+        idInformation = id_token.verify_oauth2_token(
+            token,
+            requests.Request(),
+            '1069669795497-ifvno18k8plqe1rdumnjls437oehl0ke.apps.googleusercontent.com')
+        logger.info(idInformation)
+ 
+        if idInformation['iss'] not in ['accounts.google.com', 
+            'https://accounts.google.com']:
+            status[ok_login] = False 
+            return status
+ 
+        # Get principalId from idInformation
+        status[ok_login] = True 
+        google_login = idInformation['sub']
+        if (not db_queries.login_exist(google_login)):
+            db_queries.add_user(google_login, 'SecretGooglePassword')
+        status[cookie] = db_queries.add_cookie(google_login)
+        return status
+ 
+    except ValueError as err:
+        status[ok_login] = False 
+        return status
+
 def lambda_handler(event, context):
     ret = {}
     ret['statusCode'] = 200
@@ -72,6 +98,9 @@ def lambda_handler(event, context):
     elif q_params.get_login_page in q_string:
         ret['body'] = html_tags.login_page
         return ret
+    elif q_params.get_google_login_page in q_string:
+        ret['body'] = html_tags.google_login_page
+        return ret
     elif q_params.logout in q_string:
         ret['headers']['Set-Cookie'] = ''
         user.login = db_queries.anon
@@ -82,6 +111,16 @@ def lambda_handler(event, context):
         return ret
     elif q_params.do_login in q_string:
         login_status = do_login(q_string[q_params.login], q_string[q_params.password])
+        if (login_status[ok_login]):
+            ret['headers']['Set-Cookie'] = login_status[cookie] 
+            user.get_current_user(None, login_status[cookie])
+            ret['body'] = html_tags.main_menu()
+            return ret
+        else:
+            ret['body'] = html_tags.fail_login()
+            return ret
+    elif q_params.do_login_google in q_string: #copypaste from above
+        login_status = do_login_google(q_string[q_params.google_token])
         if (login_status[ok_login]):
             ret['headers']['Set-Cookie'] = login_status[cookie] 
             user.get_current_user(None, login_status[cookie])
