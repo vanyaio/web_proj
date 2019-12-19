@@ -17,6 +17,19 @@ python3 -m pip install --target ./yaml/python PyYAML
 python3 -m pip install --target ./postgresql/python psycopg2
 env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" pip3 install psycopg2 -t ./postgresql/python 
 
+python3 -m pip install --target ./google google-auth
+python3 -m pip install --target ./req3 requests
+pip install google-auth -t google27
+
+pip3 install requests -t req
+zip -r req.zip req
+pip3 uninstall requests
+
+pip3 install google-auth -t req
+
+pip3 install google-auth -t auth
+zip -r auth.zip auth
+pip3 uninstall google-auth
 
 import json
 def lambda_handler(event, context):
