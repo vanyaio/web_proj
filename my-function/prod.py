@@ -73,7 +73,8 @@ def do_login_google(token):
  
         # Get principalId from idInformation
         status[ok_login] = True 
-        google_login = idInformation['sub']
+        #  google_login = idInformation['sub']
+        google_login = idInformation['name']
         if (not db_queries.login_exist(google_login)):
             db_queries.add_user(google_login, 'SecretGooglePassword')
         status[cookie] = db_queries.add_cookie(google_login)
@@ -90,6 +91,7 @@ def lambda_handler(event, context):
         'Content-Type': 'text/html'
     }
 
+    logger.info(event['headers']['cookie'])
     user.get_current_user(event)
     #  logger.info(user.login)
     #actually that's mapping

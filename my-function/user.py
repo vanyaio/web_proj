@@ -11,9 +11,13 @@ def get_current_user(event, cookie=None):
 
     if 'cookie' in event['headers']:
         ck = event['headers']['cookie']
+        if (ck == ''):
+            login = db_queries.anon
+            return
         ck = ck.split(';')
-        ck = ck[-1].split()
-        login = db_queries.get_login_by_cookie(ck[0])
+        ck = ck[-1]
+        ck = ck.strip()
+        login = db_queries.get_login_by_cookie(ck)
         return
     else:
         login = db_queries.anon
