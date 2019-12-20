@@ -51,12 +51,15 @@ def get_login_by_cookie(cookie):
         return anon
 
     with conn.cursor() as cur:
-        cur.execute(f'''
+        rows_cnt = cur.execute(f'''
             select login from cookie where cookie = '%s';
             ''' % str(cookie))
-        ret = cur.fetchall()
-        conn.commit()
-        return ret[0][0]
+        if (rows_cnt > 0):
+            ret = cur.fetchall()
+            conn.commit()
+            return ret[0][0]
+        else:
+            return anon
 
 def is_login_data_correct(login, password):
     with conn.cursor() as cur:
@@ -68,6 +71,18 @@ def is_login_data_correct(login, password):
             return True
         else:
             return False
+
+def login_exist(login):
+    with conn.cursor() as cur:
+        rows_cnt = cur.execute(f'''
+                            select * from user where
+                            (login = '%s');
+                            ''' % login)
+        if (rows_cnt > 0):
+            return True
+        else:
+            return False
+
 
 def add_cookie(login):
     N = 15 

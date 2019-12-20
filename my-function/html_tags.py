@@ -148,7 +148,7 @@ google_login_page = f'''
     </form>
 
     <script>
-      function onSignIn(googleUser) {
+      function onSignIn(googleUser) {{
         // Useful data for your client-side scripts:
         var profile = googleUser.getBasicProfile();
         console.log("ID: " + profile.getId()); // Don't send this directly to your server!
@@ -165,12 +165,12 @@ google_login_page = f'''
         var request = new XMLHttpRequest();
         request.open("GET","https://ogunh8f1ck.execute-api.us-east-1.amazonaws.com/prod", true);
         request.setRequestHeader("Authorization", id_token);
-        request.onload = function() {
+        request.onload = function() {{
           var text = request.responseText;
           document.getElementById("content").innerHTML = id_token;
-        };
+        }};
         request.send(); 
-      }                                                                        
+      }}
     </script>
   </body>
 </html>

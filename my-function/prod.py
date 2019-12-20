@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import db_queries
 import html_tags
@@ -5,6 +6,8 @@ import q_params
 import survey
 import logging
 import user
+from google.auth.transport import requests
+from google.oauth2 import id_token
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -135,6 +138,7 @@ def lambda_handler(event, context):
         return ret
     elif q_params.create_survey in q_string:
         ret['body'] = html_tags.create_survey()
+        #  ret['body'] = str(type(event)) + "<br>" + str(event) + "<br>" + "keke"
         return ret
     elif q_params.create_by_yaml in q_string:
         ret['body'] = create_by_yaml(q_string[q_params.create_by_yaml])

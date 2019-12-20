@@ -11,3 +11,6 @@ password = 'password'
 get_signup_page = "get_signup_page" 
 do_signup = "do_signup"
 logout = "logout"
+do_login_google = "do_login_google"
+google_token = "google_token"
+get_google_login_page = "get_google_login_page"
