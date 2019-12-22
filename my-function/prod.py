@@ -8,9 +8,13 @@ import logging
 import user
 from google.auth.transport import requests
 from google.oauth2 import id_token
+import boto3
+import conf
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+sns = boto3.client('sns')
 
 def create_by_yaml(yaml_str):
     str1 = yaml_str.replace("\r", "")
@@ -19,6 +23,7 @@ def create_by_yaml(yaml_str):
     added_survey = db_queries.get_last_survey()
 
     logger.info(added_survey)
+    sns.publish(PhoneNumber = conf.admin_number, Message=f'''Added new survey id %s''' % str(added_survey))
 
     return html_tags.create_by_yaml(added_survey)
 
