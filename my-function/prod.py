@@ -167,3 +167,6 @@ def lambda_handler(event, context):
     elif q_params.get_user_surveys in q_string:
         ret['body'] = get_user_surveys(q_string[q_params.login])
         return ret
+    elif q_params.get_user_info in q_string:
+        ret['body'] = html_tags.get_user_info(q_string[q_params.login])
+        return ret

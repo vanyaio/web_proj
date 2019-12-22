@@ -245,8 +245,19 @@ def create_by_yaml(added_survey):
         ''' % (conf.api_url, q_params.get_survey, str(added_survey))
     return wrap_tag(html_str)
 
+def get_user_info(login):
+    html = f'''
+            <br> User %s info <br>
+            <form action="./prod" method="get">
+              <input type="hidden" name="%s" value="1">
+              <input type="hidden" name="login" value="%s">
+              <input type="submit" value="Surveys created by user!">
+            </form>
+            ''' % (login, q_params.get_user_surveys, login)
+    return wrap_tag(html)
+
 def get_user_surveys(login, surveys):
-    html_str = ''
+    html_str = f'''<br> Surveys created by %s''' % login
     for survey in surveys:
         survey_id = survey[0]
         html_str += f'''
