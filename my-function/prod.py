@@ -23,7 +23,7 @@ def create_by_yaml(yaml_str):
     added_survey = db_queries.get_last_survey()
 
     logger.info(added_survey)
-    sns.publish(PhoneNumber = conf.admin_number, Message=f'''Added new survey id %s''' % str(added_survey))
+    #sns.publish(PhoneNumber = conf.admin_number, Message=f'''Added new survey id %s''' % str(added_survey))
 
     return html_tags.create_by_yaml(added_survey)
 

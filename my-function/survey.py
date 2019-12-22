@@ -27,7 +27,7 @@ def get_html_survey_from_yaml_str(survey_str, form_action, survey_id):
 
     html_str += f'''\n<input type="hidden" name="%s" value="1">''' % q_params.submit_survey
     html_str += f'''\n<input type="hidden" name="%s" value="%s">''' % (q_params.survey_id_str, str(survey_id))
-    html_str += '\n<input type="submit" value="Submit">'
+    html_str += '\n<input type="submit" class="submit" value="Submit">'
     html_str += "\n</form>"
     return html_str
 
@@ -65,7 +65,7 @@ def get_var_val_str_from_map(q_string):
 if __name__ == "__main__":
     ys = f'''
 - type: desc
-  desc: "gender?"
+  desc: "Your gender?"
 - type: radio
   opts:
     - val: male
@@ -73,13 +73,13 @@ if __name__ == "__main__":
     - val: female
       desc: "Female"
 - type: desc
-  desc: "Car?"
+  desc: "Your favourite car?"
 - type: radio
   opts:
     - val: bmw
       desc: "BMW"
     - val: mers
-      desc: "MERS"
+      desc: "Mersedes"
     '''
 
     print(get_html_survey_from_yaml_str(ys, "./prod", 10))

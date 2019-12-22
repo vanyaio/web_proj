@@ -3,29 +3,129 @@ import survey
 import user
 import conf
 
+css = """
+@import url("https://fonts.googleapis.com/css?family=Josefin+Sans:700|Roboto:300");
+
+body{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    background-color: rgb(247, 247, 247);   
+    width: 800px;
+    margin: 60px auto;
+    
+}
+
+input {
+    border: none; 
+}
+
+input:focus {
+    outline-width: none; 
+}
+
+input:hover{
+    outline-style: solid;
+    outline-color: paleturquoise;    
+}
+
+.log{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size:27px;
+}
+
+
+.input {
+    width: 100%;
+    font-family: 'Roboto';
+    font-weight: 300;
+    font-size:27px;
+    
+    background-color: rgb(248, 248, 248);
+    display: inline;
+}
+
+
+.input-container{
+    padding: 9px 14px;
+    border: 1px rgb(230, 230, 230) solid;
+    border-radius: 4px;
+    display: inline;
+    background-color: rgb(248, 248, 248);
+    margin-bottom: 20px;
+    
+}
+
+.submit{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size:17px;
+    border: 1px rgb(230, 230, 230) solid;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, .08);
+    margin-bottom: 20px;
+    width: 150px;
+    padding: 9px 14px;
+    background-color: rgb(243, 247, 255);
+    border-radius: 4px;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, .05);
+    
+    
+}
+
+.submit-log{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size:27px;
+    border: 1px rgb(230, 230, 230) solid;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, .08);
+    margin-bottom: 20px;
+    width: 250px;
+    padding: 9px 14px;
+    background-color: rgb(243, 247, 255);
+    border-radius: 4px;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, .05);
+    
+    
+}
+
+
+form{
+    display:inline;
+}
+
+textarea{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    padding-left: 15px;
+}
+"""
+
 def wrap_tag(tag):
     html_begin = f'''
                 <html>
                 <header><title>Public Survey</title></header>
+                <style>
+                %s
+                </style>
                 <body>
-                You are logged in as %s <br>
+                <div class="log">You are logged in as %s</div> <br>
                 <form action="./prod" method="get">
                   <input type="hidden" name="%s" value="1">
-                  <input type="submit" value="Switch user">
+                  <input type="submit" class="submit" value="Switch user">
                 </form>
                 <form action="./prod" method="get">
                   <input type="hidden" name="%s" value="1">
-                  <input type="submit" value="Create user">
+                  <input type="submit" class="submit" value="Create user">
                 </form>
                 <form action="./prod" method="get">
                   <input type="hidden" name="%s" value="1">
-                  <input type="submit" value="Logout">
+                  <input type="submit" class="submit" value="Logout">
                 </form>
                 <form action="./prod" method="get">
                   <input type="hidden" name="" value="">
-                  <input type="submit" value="Go to main menu">
+                  <input type="submit" class="submit" value="Go to main menu">
                 </form>
-                ''' % (user.login, q_params.get_login_page, q_params.get_signup_page, q_params.logout)
+                ''' % (css, user.login, q_params.get_login_page, q_params.get_signup_page, q_params.logout)
     html_end = f'''
                 </body>
                 </html>
@@ -36,7 +136,7 @@ def main_menu():
     main_menu = f'''
                     <form action="./prod" method="get">
                       <input type="hidden" name="%s" value="1">
-                      <input type="submit" value="Create survey">
+                      <input type="submit" class="submit" value="Create survey">
                     </form>
                 ''' % q_params.create_survey
     main_menu = wrap_tag(main_menu)
@@ -47,7 +147,7 @@ def fail_login():
                     Wrong login or password! <br>
                     <form action="./prod" method="get">
                       <input type="hidden" name="%s" value="1">
-                      <input type="submit" value="Create survey">
+                      <input type="submit" class="submit" value="Create survey">
                     </form>
                 ''' % q_params.create_survey
     fail_login_p = wrap_tag(fail_login_p)
@@ -63,7 +163,7 @@ def signup_res(login, status):
     page += f'''
                 <form action="./prod" method="get">
                   <input type="hidden" name="%s" value="1">
-                  <input type="submit" value="Create survey">
+                  <input type="submit" class="submit" value="Create survey">
                 </form>
             ''' % q_params.create_survey
     page = wrap_tag(page)
@@ -71,8 +171,9 @@ def signup_res(login, status):
 
 def create_survey():
     create_survey = f'''
+                  <div class="log">    
                     Type your survey template. Example below
-                    results in the following survey <br>
+                    results in the following survey </div> <br>
                     <form action="./prod" method="get">
                         Your gender?<br>
                         <input type="radio" name="name1" value="male"> Male <br> 
@@ -104,7 +205,7 @@ def create_survey():
       desc: "Mersedes"
                       </textarea>
                       <br>
-                      <input type="submit" value="Submit">
+                      <input type="submit" class="submit" value="Submit">
                     </form>
                     ''' % q_params.create_by_yaml 
 
@@ -112,16 +213,16 @@ def create_survey():
     return create_survey
 
 login_page = f'''
-            <form action="./prod" method="get">
+            <form  class="input" action="./prod" method="get">
               login: <input type="text" name="%s"><br>
               password: <input type="text" name="%s"><br>
               <input type="hidden" name="%s" value="1">
-              <input type="submit" value="Log in!">
+              <input class="submit-log" type="submit" value="Log in!">
             </form>
             <br>
-            <form action="./prod" method="get">
+            <form class="input" action="./prod" method="get">
               <input type="hidden" name="%s" value="1">
-              <input type="submit" value="Log in with google">
+              <input  class="submit-log" type="submit" value="Log in with google">
             </form>
             
             ''' % (q_params.login, q_params.password, q_params.do_login, q_params.get_google_login_page)
@@ -131,14 +232,16 @@ signup_page = f'''
               login: <input type="text" name="%s"><br>
               password: <input type="text" name="%s"><br>
               <input type="hidden" name="%s" value="1">
-              <input type="submit" value="Add new user!">
+              <input type="submit" class="submit-log" value="Add new user!">
             </form>
             ''' % (q_params.login, q_params.password, q_params.do_signup)
 
 def create_by_yaml(added_survey):
     html_str = f'''
+      <div class="log">    
         Your survey is created!<br>
         <a href="%s?%s=%s">Link</a>
+      </div>
         ''' % (conf.api_url, q_params.get_survey, str(added_survey))
     return wrap_tag(html_str)
 
@@ -146,7 +249,7 @@ def get_survey(yaml_str, survey_id):
     html_str = f'''
                     <form action="./prod" method="get">
                       <input type="hidden" name="%s" value="%s">
-                      <input type="submit" value="See survey results">
+                      <input type="submit" class="submit" value="See survey results">
                     </form>
                 ''' % (q_params.get_survey_res, str(survey_id))
     html_str += survey.get_html_survey_from_yaml_str(yaml_str, "./prod", survey_id)
@@ -157,7 +260,7 @@ def submit_survey(survey_id):
     html_str += f'''
                     <form action="./prod" method="get">
                       <input type="hidden" name="%s" value="%s">
-                      <input type="submit" value="See survey results">
+                      <input type="submit" class="submit" value="See survey results">
                     </form>
                 ''' % (q_params.get_survey_res, str(survey_id))
     return wrap_tag(html_str)
