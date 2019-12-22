@@ -5,8 +5,7 @@ import pymysql
 import random
 import string
 
-rds_host = "database-2.ctr9yzjpib8v.us-east-1.rds.amazonaws.com"
-conn = pymysql.connect(rds_host, user=rds_config.db_username, passwd=rds_config.db_password, db=rds_config.db_name, connect_timeout=5)
+conn = pymysql.connect(rds_config.rds_host, user=rds_config.db_username, passwd=rds_config.db_password, db=rds_config.db_name, connect_timeout=5)
 
 anon = 'Anonymous'
 

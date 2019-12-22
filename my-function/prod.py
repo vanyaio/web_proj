@@ -68,7 +68,7 @@ def do_login_google(token):
         idInformation = id_token.verify_oauth2_token(
             token,
             requests.Request(),
-            '1069669795497-ifvno18k8plqe1rdumnjls437oehl0ke.apps.googleusercontent.com')
+            f'''%s.apps.googleusercontent.com''' % conf.google_token)
         logger.info(idInformation)
  
         if idInformation['iss'] not in ['accounts.google.com', 
