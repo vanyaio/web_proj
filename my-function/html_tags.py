@@ -1,6 +1,7 @@
 import q_params
 import survey
 import user
+import conf
 
 def wrap_tag(tag):
     html_begin = f'''
@@ -19,6 +20,10 @@ def wrap_tag(tag):
                 <form action="./prod" method="get">
                   <input type="hidden" name="%s" value="1">
                   <input type="submit" value="Logout">
+                </form>
+                <form action="./prod" method="get">
+                  <input type="hidden" name="" value="">
+                  <input type="submit" value="Go to main menu">
                 </form>
                 ''' % (user.login, q_params.get_login_page, q_params.get_signup_page, q_params.logout)
     html_end = f'''
@@ -66,8 +71,39 @@ def signup_res(login, status):
 
 def create_survey():
     create_survey = f'''
+                    Type your survey template. Example below
+                    results in the following survey <br>
                     <form action="./prod" method="get">
-                      <textarea name="%s" cols="50" rows="80"></textarea>
+                        Your gender?<br>
+                        <input type="radio" name="name1" value="male"> Male <br> 
+                        <input type="radio" name="name1" value="female"> Female <br> 
+                        Your favourite car?<br>
+                        <input type="radio" name="name2" value="bmw"> BMW <br> 
+                        <input type="radio" name="name2" value="mers"> Mersedes <br> 
+                        <input type="hidden" name="submit_survey" value="1">
+                        <input type="hidden" name="survey_id" value="24">
+                    </form>
+                    <br>
+                    <form action="./prod" method="get">
+                      <textarea name="%s" cols="40" rows="25">
+- type: desc
+  desc: "Your gender?"
+- type: radio
+  opts:
+    - val: male
+      desc: "Male"
+    - val: female
+      desc: "Female"
+- type: desc
+  desc: "Your favourite car?"
+- type: radio
+  opts:
+    - val: bmw
+      desc: "BMW"
+    - val: mers
+      desc: "Mersedes"
+                      </textarea>
+                      <br>
                       <input type="submit" value="Submit">
                     </form>
                     ''' % q_params.create_by_yaml 
@@ -101,9 +137,9 @@ signup_page = f'''
 
 def create_by_yaml(added_survey):
     html_str = f'''
-        Your survey is created!
-        Link: /prod?%s=%s
-        ''' % (q_params.get_survey, str(added_survey))
+        Your survey is created!<br>
+        <a href="%s?%s=%s">Link</a>
+        ''' % (conf.api_url, q_params.get_survey, str(added_survey))
     return wrap_tag(html_str)
 
 def get_survey(yaml_str, survey_id):
