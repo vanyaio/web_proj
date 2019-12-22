@@ -144,7 +144,7 @@ def main_menu():
 
 def fail_login():
     fail_login_p = f'''
-                    Wrong login or password! <br>
+                    <div class="log">  Wrong login or password! <br> </div>
                     <form action="./prod" method="get">
                       <input type="hidden" name="%s" value="1">
                       <input type="submit" class="submit" value="Create survey">
@@ -243,6 +243,17 @@ def create_by_yaml(added_survey):
         <a href="%s?%s=%s">Link</a>
       </div>
         ''' % (conf.api_url, q_params.get_survey, str(added_survey))
+    return wrap_tag(html_str)
+
+def get_user_surveys(login, surveys):
+    html_str = ''
+    for survey in surveys:
+        survey_id = survey[0]
+        html_str += f'''
+          <div class="log">    
+            <a href="%s?%s=%s">Survey id %s</a> <br>
+          </div>
+            ''' % (conf.api_url, q_params.get_survey, str(survey_id), str(survey_id))
     return wrap_tag(html_str)
 
 def get_survey(yaml_str, survey_id):

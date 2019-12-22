@@ -19,7 +19,7 @@ sns = boto3.client('sns')
 def create_by_yaml(yaml_str):
     str1 = yaml_str.replace("\r", "")
     str2 = str1.replace('"', '\\"')
-    db_queries.add_survey(db_queries.anon, str2);
+    db_queries.add_survey(user.login, str2);
     added_survey = db_queries.get_last_survey()
 
     logger.info(added_survey)
@@ -90,6 +90,10 @@ def do_login_google(token):
         status[ok_login] = False 
         return status
 
+def get_user_surveys(login):
+    surveys = db_queries.get_user_surveys(login)
+    return html_tags.get_user_surveys(login, surveys)
+
 def lambda_handler(event, context):
     ret = {}
     ret['statusCode'] = 200
@@ -159,4 +163,7 @@ def lambda_handler(event, context):
         return ret
     elif q_params.get_survey_res in q_string:
         ret['body'] = get_survey_res(q_string[q_params.get_survey_res])
+        return ret
+    elif q_params.get_user_surveys in q_string:
+        ret['body'] = get_user_surveys(q_string[q_params.login])
         return ret

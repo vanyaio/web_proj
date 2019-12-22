@@ -4,6 +4,9 @@ import rds_config
 import pymysql
 import random
 import string
+import logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 conn = pymysql.connect(rds_config.rds_host, user=rds_config.db_username, passwd=rds_config.db_password, db=rds_config.db_name, connect_timeout=5)
 
@@ -124,3 +127,14 @@ def add_survey_res(survey_id, login, var_val_map_str):
             values ("%s", "%s", "%s");
             ''' % (survey_id, login, var_val_map_str))
         conn.commit()
+
+def get_user_surveys(login):
+    with conn.cursor() as cur:
+        rows_cnt = cur.execute(f'''
+            select survey_id from survey_res where login = '%s';
+            ''' % str(login))
+        logger.info("rows cnt = " + str(rows_cnt))
+        ret = cur.fetchall()
+        logger.info("rows are = " + str(ret))
+        conn.commit()
+        return ret
