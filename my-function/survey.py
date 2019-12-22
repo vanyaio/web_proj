@@ -24,6 +24,12 @@ def get_html_survey_from_yaml_str(survey_str, form_action, survey_id):
             for opt in opts:
                 html_str += f'''
 <input type="%s" name="%s" value="%s"> %s <br> ''' % ('radio',name,opt['val'],opt['desc'])
+        elif (item['type'] == 'text'):
+            name = 'name' + str(name_cnt)
+            name_cnt += 1
+            html_str += f'''
+<input type="text" name="%s"> <br>
+            ''' % name
 
     html_str += f'''\n<input type="hidden" name="%s" value="1">''' % q_params.submit_survey
     html_str += f'''\n<input type="hidden" name="%s" value="%s">''' % (q_params.survey_id_str, str(survey_id))
@@ -48,6 +54,11 @@ def get_html_survey_res(var_val_map, survey_str):
                     checked = 'checked'
                 html_str += f'''
 <input type="%s" name="%s" value="%s" %s> %s <br> ''' % ('radio',name,opt['val'],checked,opt['desc'])
+        elif (item['type'] == 'text'):
+            name = 'name' + str(name_cnt)
+            name_cnt += 1
+            html_str += f'''
+<input type="text" value="%s" > <br> ''' % var_val_map[name] 
 
     html_str += "\n</form>"
     return html_str
@@ -64,6 +75,9 @@ def get_var_val_str_from_map(q_string):
 
 if __name__ == "__main__":
     ys = f'''
+- type: desc
+  desc: "Your name?"
+- type: text
 - type: desc
   desc: "Your gender?"
 - type: radio
