@@ -170,16 +170,16 @@ google_login_page = f'''
   <head>
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" 
-      content="1069669795497-ifvno18k8plqe1rdumnjls437oehl0ke.apps.googleusercontent.com">
+      content="%s.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
   </head>
   <body>
     <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-    <p id="content"></p>
 
     <form action="./prod" method="get">
       <input type="hidden" name="%s" value="1">
-      <textarea name="%s" cols="50" rows="40"></textarea>
+      <textarea name="%s" cols="50" rows="40" id="tokenField">No token provided: Sign in first</textarea>
+      <br>
       <input type="submit" value="Login with this token">
     </form>
 
@@ -199,15 +199,15 @@ google_login_page = f'''
         console.log("ID Token: " + id_token);
  
         var request = new XMLHttpRequest();
-        request.open("GET","https://ogunh8f1ck.execute-api.us-east-1.amazonaws.com/prod", true);
+        request.open("GET","%s", true);
         request.setRequestHeader("Authorization", id_token);
         request.onload = function() {{
           var text = request.responseText;
-          document.getElementById("content").innerHTML = id_token;
+          document.getElementById("tokenField").innerHTML = id_token;
         }};
         request.send(); 
       }}
     </script>
   </body>
 </html>
-''' % (q_params.do_login_google, q_params.google_token)
+''' % (conf.google_token, q_params.do_login_google, q_params.google_token, conf.api_url)
