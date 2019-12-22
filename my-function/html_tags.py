@@ -256,6 +256,13 @@ def get_user_info(login):
             ''' % (login, q_params.get_user_surveys, login)
     return wrap_tag(html)
 
+def user_link(login):
+    html_str = f'''
+        <br>
+        <a href="%s?%s=1&login=%s">%s</a><br>
+        ''' % (conf.api_url, q_params.get_user_info, login, login)
+    return html_str
+
 def get_user_surveys(login, surveys):
     html_str = f'''<br> Surveys created by %s''' % login
     for survey in surveys:

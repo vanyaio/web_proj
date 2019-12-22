@@ -39,7 +39,8 @@ def get_survey_res(survey_id):
     for res in res_raws:
         var_val_map = survey.get_var_val_map_from_str(res[2])
         login = res[1]
-        html_str += str(login) + " <br>"
+        #  html_str += str(login) + " <br>"
+        html_str += html_tags.user_link(login) 
         html_str += survey.get_html_survey_res(var_val_map, survey_yaml_str)
     return html_tags.get_survey_res(html_str)
 
